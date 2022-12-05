@@ -2,7 +2,7 @@ package day3;
 
 import java.util.stream.Stream;
 
-public class Main {
+public class Day3 {
 
     public static void main(String[] args) {
         System.out.println("PART 1");
@@ -19,8 +19,8 @@ public class Main {
         String[] rucksacks = input.split("\n");
 
         int total = Stream.of(rucksacks)
-                    .map(Main::getCommonItem)
-                    .map(Main::calculatePriority)
+                    .map(Day3::getCommonItem)
+                    .map(Day3::calculatePriority)
                     .reduce(Integer::sum).orElse(0);
 
         System.out.println(total);

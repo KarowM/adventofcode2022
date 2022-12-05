@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Main {
+public class Day1 {
 
     public static void main(String[] args) {
         System.out.println("PART 1");

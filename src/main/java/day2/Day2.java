@@ -2,7 +2,7 @@ package day2;
 
 import java.util.stream.Stream;
 
-public class Main {
+public class Day2 {
 
     public static void main(String[] args) {
         System.out.println("PART 1");
