@@ -19,7 +19,7 @@ public class Day2 {
         String[] rounds = input.split("\n");
 
         int total = Stream.of(rounds)
-                .map(round -> calculateValue(round.charAt(0), round.charAt(2))).reduce(Integer::sum).get();
+                .map(round -> calculateValue(round.charAt(0), round.charAt(2))).reduce(Integer::sum).orElse(0);
         System.out.println(total);
     }
 
@@ -28,7 +28,7 @@ public class Day2 {
         String[] rounds = input.split("\n");
 
         int total = Stream.of(rounds)
-                .map(round -> calculateValue2(round.charAt(0), round.charAt(2))).reduce(Integer::sum).get();
+                .map(round -> calculateValue2(round.charAt(0), round.charAt(2))).reduce(Integer::sum).orElse(0);
         System.out.println(total);
     }
 
