@@ -19,13 +19,24 @@ public class Day4 {
         String[] elfPairs = input.split("\n");
 
         long totalOverlaps = Stream.of(elfPairs)
+                .filter(Day4::fullOverlapExists)
+                .count();
+
+        System.out.println(totalOverlaps);
+    }
+
+    public static void day4_2() {
+        String input = getInput();
+        String[] elfPairs = input.split("\n");
+
+        long totalOverlaps = Stream.of(elfPairs)
                 .filter(Day4::overlapExists)
                 .count();
 
         System.out.println(totalOverlaps);
     }
 
-    private static boolean overlapExists(String elfPair) {
+    private static boolean fullOverlapExists(String elfPair) {
         String[] split = elfPair.split(",");
         String[] elf1 = split[0].split("-");
         String[] elf2 = split[1].split("-");
@@ -39,8 +50,18 @@ public class Day4 {
                 (e2Start <= e1Start && e2End >= e1End);
     }
 
-    public static void day4_2() {
+    private static boolean overlapExists(String elfPair) {
+        String[] split = elfPair.split(",");
+        String[] elf1 = split[0].split("-");
+        String[] elf2 = split[1].split("-");
 
+        int e1Start = Integer.parseInt(elf1[0]);
+        int e1End = Integer.parseInt(elf1[1]);
+        int e2Start = Integer.parseInt(elf2[0]);
+        int e2End = Integer.parseInt(elf2[1]);
+
+        return (e1Start <= e2Start && e1End >= e2Start) ||
+                (e2Start <= e1Start && e2End >= e1Start);
     }
 
     private static String getInputExample() {
