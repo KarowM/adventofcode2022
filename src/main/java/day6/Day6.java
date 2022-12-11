@@ -2,7 +2,8 @@ package day6;
 
 public class Day6 {
 
-    private static final int WINDOW_SIZE = 4;
+    private static final int PACKET_START_SIZE = 4;
+    private static final int MESSAGE_START_SIZE = 14;
 
     public static void main(String[] args) {
         System.out.println("PART 1");
@@ -19,7 +20,20 @@ public class Day6 {
 
         int start = 0;
         int end = 0;
-        while (end - start < WINDOW_SIZE) {
+        while (end - start < PACKET_START_SIZE) {
+            start = getNewStart(input, start, end);
+            end++;
+        }
+
+        System.out.println(end);
+    }
+
+    private static void day6_2() {
+        String input = getInput();
+
+        int start = 0;
+        int end = 0;
+        while (end - start < MESSAGE_START_SIZE) {
             start = getNewStart(input, start, end);
             end++;
         }
@@ -40,28 +54,24 @@ public class Day6 {
         return start;
     }
 
-    private static void day6_2() {
-
-    }
-
     private static String getInputExample1() {
-        return "bvwbjplbgvbhsrlpgdmjqwftvncz";
+        return "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
     }
 
     private static String getInputExample2() {
-        return "nppdvjthqldpwncqszvftbrmjlhg";
+        return "bvwbjplbgvbhsrlpgdmjqwftvncz";
     }
 
     private static String getInputExample3() {
-        return "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg";
+        return "nppdvjthqldpwncqszvftbrmjlhg";
     }
 
     private static String getInputExample4() {
-        return "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw";
+        return "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg";
     }
 
     private static String getInputExample5() {
-        return "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
+        return "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw";
     }
 
     private static String getInput() {
