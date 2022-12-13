@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 public class Day7 {
 
     private static final int DIR_NAME_INDEX = 5;
+    private static final int TOTAL_SPACE = 70000000;
+    private static final int REQUIRED_SPACE = 30000000;
 
     public static void main(String[] args) {
         System.out.println("PART 1");
@@ -20,55 +22,35 @@ public class Day7 {
 
     private static void day7_1() {
         String input = getInput();
-        String[] lines = input.split("\n");
+        File root = parseFileSystem(input);
 
-        int i = 0;
-        File dir = new File("root", null);
-        dir.addChild(new File("/", dir));
-        while (i < lines.length) {
-            String line = lines[i];
-
-            if (line.equals("$ ls")) {
-                String dirName = lines[i-1].substring(DIR_NAME_INDEX);
-
-                dir = dir.getChild(dirName);
-            }
-
-            if (line.equals("$ cd ..")) {
-                dir = dir.getParent();
-            }
-
-            if (!line.startsWith("$")) {
-                String[] file = line.split(" ");
-                String name = file[1];
-                File newDocument;
-                if (file[0].startsWith("dir")) { // it is a document
-                    newDocument = new File(name, dir);
-                } else {
-                    newDocument = new File(name, dir, Integer.parseInt(file[0]));
-                }
-                dir.addChild(newDocument);
-            }
-
-            i++;
-        }
-
-        while (dir.getParent() != null) {
-            dir = dir.getParent();
-        }
-
-        List<File> allDirs = dir.getDirs();
-        long total = allDirs.stream()
+        List<File> allDirs = root.getDirs();
+        int total = allDirs.stream()
                 .map(File::getSize)
                 .filter(size -> size < 100000)
-                .reduce(Long::sum)
-                .orElse(0L);
+                .reduce(Integer::sum)
+                .orElse(0);
 
         System.out.println(total);
     }
 
     private static void day7_2() {
         String input = getInput();
+        File root = parseFileSystem(input);
+
+        int usedSpace = root.getSize();
+        int unusedSpace = TOTAL_SPACE - usedSpace;
+        int minSpaceRequired = REQUIRED_SPACE - unusedSpace;
+        List<File> allDirs = root.getDirs();
+        List<File> collect = allDirs.stream()
+                .sorted(Comparator.comparingDouble(File::getSize))
+                .filter(file -> file.getSize() >= minSpaceRequired)
+                .collect(Collectors.toList());
+
+        System.out.println(collect.get(0).getSize());
+    }
+
+    private static File parseFileSystem(String input) {
         String[] lines = input.split("\n");
 
         int i = 0;
@@ -106,17 +88,7 @@ public class Day7 {
             dir = dir.getParent();
         }
 
-
-        long usedSpace = dir.getSize();
-        long unusedSpace = 70000000 - usedSpace;
-        long minSpaceRequired = 30000000 - unusedSpace;
-        List<File> allDirs = dir.getDirs();
-        List<File> collect = allDirs.stream()
-                .sorted(Comparator.comparingDouble(File::getSize))
-                .filter(file -> file.getSize() >= minSpaceRequired)
-                .collect(Collectors.toList());
-
-        System.out.println(collect.get(0).getSize());
+        return dir;
     }
 
     private static String getInputExample() {

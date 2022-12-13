@@ -7,7 +7,7 @@ public class File {
 
     private final String name;
     private final File parent;
-    private long size;
+    private int size;
     private Map<String, File> children;
 
     public File(String name, File parent) {
@@ -38,11 +38,11 @@ public class File {
         children.put(f.getName(), f);
     }
 
-    public long getSize() {
+    public int getSize() {
         if (children == null) {
             return size;
         }
-        return children.values().stream().map(File::getSize).reduce(Long::sum).orElse(0L);
+        return children.values().stream().map(File::getSize).reduce(Integer::sum).orElse(0);
     }
 
     public List<File> getDirs() {
