@@ -1,6 +1,8 @@
 package day7;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Day7 {
 
@@ -56,17 +58,65 @@ public class Day7 {
         }
 
         List<File> allDirs = dir.getDirs();
-        int total = allDirs.stream()
+        long total = allDirs.stream()
                 .map(File::getSize)
                 .filter(size -> size < 100000)
-                .reduce(Integer::sum)
-                .orElse(0);
+                .reduce(Long::sum)
+                .orElse(0L);
 
         System.out.println(total);
     }
 
     private static void day7_2() {
+        String input = getInput();
+        String[] lines = input.split("\n");
 
+        int i = 0;
+        File dir = new File("root", null);
+        dir.addChild(new File("/", dir));
+        while (i < lines.length) {
+            String line = lines[i];
+
+            if (line.equals("$ ls")) {
+                String dirName = lines[i-1].substring(DIR_NAME_INDEX);
+
+                dir = dir.getChild(dirName);
+            }
+
+            if (line.equals("$ cd ..")) {
+                dir = dir.getParent();
+            }
+
+            if (!line.startsWith("$")) {
+                String[] file = line.split(" ");
+                String name = file[1];
+                File newDocument;
+                if (file[0].startsWith("dir")) { // it is a document
+                    newDocument = new File(name, dir);
+                } else {
+                    newDocument = new File(name, dir, Integer.parseInt(file[0]));
+                }
+                dir.addChild(newDocument);
+            }
+
+            i++;
+        }
+
+        while (dir.getParent() != null) {
+            dir = dir.getParent();
+        }
+
+
+        long usedSpace = dir.getSize();
+        long unusedSpace = 70000000 - usedSpace;
+        long minSpaceRequired = 30000000 - unusedSpace;
+        List<File> allDirs = dir.getDirs();
+        List<File> collect = allDirs.stream()
+                .sorted(Comparator.comparingDouble(File::getSize))
+                .filter(file -> file.getSize() >= minSpaceRequired)
+                .collect(Collectors.toList());
+
+        System.out.println(collect.get(0).getSize());
     }
 
     private static String getInputExample() {
